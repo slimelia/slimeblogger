@@ -24,6 +24,8 @@ def getBlogpostsFromDir(dirOfPosts):
 		
 		blogpostList.append(blogpostDict)
 	
+	blogpostList.sort(key=lambda postInList: postInList['date'],reverse=True)
+	
 	return blogpostList
 	
 def generateBlogContent(blogpostTemplateLocation,blogpostList):

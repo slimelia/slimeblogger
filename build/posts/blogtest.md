@@ -1,18 +1,6 @@
-@title Hello World @author slimelia @date yyyy-mm-dd
-The body is plain text, right here!
+@title Title Goes Here @author author_name_here @date 2016-05-11
+The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick quartz, vex nymphs.
 
-Hello! I'm another paragraph!
+Waltz, bad nymph, for quick jigs vex! Fox nymphs grab quick-jived waltz. Brick quiz whangs jumpy veldt fox. Bright vixens jump; dozy fowl quack.
 
-  - Unordered lists look like this!
-  - See?
-  - Cool!
-
-Oh! Here is some *italic text*, and some **bold text** too! 
-
-1. We have ordered lists too!
-2. I'm in numeric order!
-3. Hello!
-
-This is an [example link](http://example.com/)!
-
-![Look! An image!](https://www.royalcanin.com/~/media/Royal-Canin/Product-Categories/cat-adult-landing-hero.ashx "Look! An image!")
+Quick wafting zephyrs vex bold Jim. Quick zephyrs blow, vexing daft Jim. Sex-charged fop blew my junk TV quiz. How quickly daft jumping zebras vex. Two driven jocks help fax my big quiz. Quick, Baz, get my woven flax jodhpurs! "Now fax quiz Jack! " my brave 
