@@ -8,8 +8,11 @@ It's very messy and crude, but the owners of tilde.town are all about brualist w
 Web blog content is generated from Markdown blog post documents.
 
 All blog posts *MUST* contain a header on the first line.
+
 Headers must follow this format:
+
 `@title Title Goes Here @author author_name_here @date yyyy-mm-dd`
+
 Dates *MUST* be written as yyyy-mm-dd format, separated by '-'.
 
 
