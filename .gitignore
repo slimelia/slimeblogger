@@ -1,5 +1,5 @@
 # Pycache
-*.__pycache__
+*__pycache__/
 
 # Public HTML files
-*.public_html
+*public_html/
