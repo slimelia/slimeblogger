@@ -18,6 +18,8 @@ def getBlogpostsFromDir(dirOfPosts):
 		blogpostDict["body"] = markdown.markdown(fileHandler.read())
 		fileHandler.close()
 		
+		blogpostDict['filename'] = filename.replace(".md",".html")
+		
 		blogpostAttributes = blogParser.splitBlogStringToDict(lineToParse)
 		blogpostAttributes["title"] = blogpostAttributes["title"].lower()
 		blogpostDict.update(blogpostAttributes)
@@ -28,7 +30,7 @@ def getBlogpostsFromDir(dirOfPosts):
 	
 	return blogpostList
 	
-def generateBlogContent(blogpostTemplateLocation,blogpostList):
+def generateBlogpostObj(blogpostTemplateLocation,blogpost):
 	posts = []
 	content = {}
 	
@@ -36,13 +38,25 @@ def generateBlogContent(blogpostTemplateLocation,blogpostList):
 	blogpostTemplate = fileHandler.read()
 	fileHandler.close()
 	
-	for blogpost in blogpostList:
-		generatedBlogPost = pystache.render(blogpostTemplate,blogpost)
-		posts.append({"post":generatedBlogPost})
+	generatedBlogpost = pystache.render(blogpostTemplate,blogpost)
+	blogpostObj = {"post":generatedBlogpost}
 	
-	content["content"] = posts
-	return content
-
+	return blogpostObj
+	
+def generateBlogPages(dirToWriteTo,blogpostList,templates):
+	POST_TEMPLATE = templates[0]
+	SITE_TEMPLATE = templates[1]
+	
+	for blogpostObj in blogpostList:
+		blogpost = generateBlogpostObj(POST_TEMPLATE,blogpostObj)
+		siteContent = {"content":[blogpost]}
+		siteHtml = generateSite(SITE_TEMPLATE,siteContent)
+		parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
+		
+		fileHandler = open("{0}/{1}".format(dirToWriteTo,blogpostObj['filename']),"w")
+		fileHandler.write(parsedSiteHtml.prettify())
+		fileHandler.close()
+		
 def generateSite(siteTemplateLocation,content):
 	fileHandler = open(siteTemplateLocation,"r")
 	siteTemplate = fileHandler.read()
@@ -54,13 +68,20 @@ def generateSite(siteTemplateLocation,content):
 	
 if __name__ == "__main__":
 	postDir = "posts"
+	dirForPages = "../public_html/pages"
 	postTemplate = "templates/blogpost.mustache"
 	siteTemplate = "templates/site.mustache"
+	templates = [postTemplate,siteTemplate]
 	
 	postList = getBlogpostsFromDir(postDir)
-	content = generateBlogContent(postTemplate,postList)
-	siteHtml = generateSite(siteTemplate,content)
 	
+	generateBlogPages(dirForPages,postList,templates)
+	
+	index_content = {"content":[]}
+	for post in postList:
+		index_content["content"].append(generateBlogpostObj(postTemplate,post))
+		
+	siteHtml = generateSite(siteTemplate,index_content)
 	parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
 	
 	index_html = open('../public_html/index.html',"w")
