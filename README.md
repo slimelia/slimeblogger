@@ -20,4 +20,4 @@ Uses the following Python3 libraries:
   * markdown
   * pystache
   * PyTidyLib
-  * ~BeautifulSoup4~ (Currently disabled because it indented TOO MUCH) 
+  * ~~BeautifulSoup4~~ (Currently disabled because it indented TOO MUCH) 
