@@ -3,7 +3,7 @@
 import os
 import markdown
 import pystache
-import bs4
+#import bs4
 import blogpostParser
 
 def getBlogpostsFromDir(dirOfPosts):
@@ -51,10 +51,11 @@ def generateBlogPages(dirToWriteTo,blogpostList,templates):
 		blogpost = generateBlogpostObj(POST_TEMPLATE,blogpostObj)
 		siteContent = {"content":[blogpost]}
 		siteHtml = generateSite(SITE_TEMPLATE,siteContent)
-		parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
+#		parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
 		
 		fileHandler = open("{0}/{1}".format(dirToWriteTo,blogpostObj['filename']),"w")
-		fileHandler.write(parsedSiteHtml.prettify())
+#		fileHandler.write(parsedSiteHtml.prettify())
+		fileHandler.write(siteHtml)
 		fileHandler.close()
 		
 def generateSite(siteTemplateLocation,content):
@@ -82,10 +83,11 @@ if __name__ == "__main__":
 		index_content["content"].append(generateBlogpostObj(postTemplate,post))
 		
 	siteHtml = generateSite(siteTemplate,index_content)
-	parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
+#	parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
 	
 	index_html = open('../public_html/index.html',"w")
-	index_html.write(parsedSiteHtml.prettify())
+#	index_html.write(parsedSiteHtml.prettify())
+	index_html.write(siteHtml)
 	index_html.close()
 	
 	
