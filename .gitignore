@@ -2,10 +2,12 @@
 *__pycache__/
 
 # HTML files
-*public_html/*
+public_html/*
+
+# Include empty pages folder
+!public_html/pages/
+public_html/pages/*
 
 # Include CSS file
 !*style.css
 
-# Include empty pages file
-!*/pages/*
