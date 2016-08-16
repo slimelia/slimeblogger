@@ -6,6 +6,10 @@ This generator takes markdown files and generates them into blogposts. It should
 I've included a few example markdown documents in ```tilde.town-slimeblogger/build/posts/``` as a demonstration.
 Furthermore, ```tilde.town-slimeblogger/public_html/``` only contains ```style.css``` as all other content will be generated when running ```tilde.town-slimeblogger/build/generatePages.py```. The ```style.css``` file is a very basic little starter stylesheet based on the one I use on [my tilde.town blog](http://tilde.town/~slimelia/). Of course, you can completely rework it!
 
+## How To Use
+
+Please see the [wiki](https://github.com/slimelia/slimeblogger/wiki) for assistance on using this blog generator.
+
 ## Markdown formatting
 
 Web blog content is generated from Markdown blog post documents.
