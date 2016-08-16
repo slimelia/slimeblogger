@@ -21,7 +21,7 @@ def getBlogpostsFromDir(dirOfPosts):
 		blogpostDict['filename'] = filename.replace(".md",".html")
 		
 		blogpostAttributes = blogParser.splitBlogStringToDict(lineToParse)
-		blogpostAttributes["title"] = blogpostAttributes["title"].lower()
+		blogpostAttributes["title"] = blogpostAttributes["title"].title()
 		blogpostDict.update(blogpostAttributes)
 		
 		blogpostList.append(blogpostDict)

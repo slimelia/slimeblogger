@@ -14,5 +14,6 @@ class blogpostParser:
 
 if __name__ == "__main__":
 	exampleString = "@title Example Title @author slimelia @date Today"
-	exampleDict = splitBlogStringToDict(exampleString)
+	parser = blogpostParser()
+	exampleDict = parser.splitBlogStringToDict(exampleString)
 	print(exampleDict)
