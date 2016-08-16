@@ -4,9 +4,8 @@
 # HTML files
 public_html/*
 
-# Include empty pages folder
+# Include pages folder
 !public_html/pages/
-public_html/pages/*
 
 # Include CSS file
 !*style.css
