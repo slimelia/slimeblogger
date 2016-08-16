@@ -1,0 +1,84 @@
+@charset "UTF-8";
+
+body {
+	font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+	background-color:gainsboro;
+	color: black;
+	}
+
+header {
+	text-align: center;
+	}
+
+a {
+	color: dodgerblue;
+	text-decoration: none;
+}
+
+a:hover {
+	color: lightblue;
+	text-decoration: none;
+	}
+	
+nav {
+	margin-bottom: 1vh;
+}
+
+nav ul {
+	text-align: center;
+	margin: 0;
+    padding: 0;
+	}
+	
+nav li {
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline;
+	}
+	
+nav a{
+	display: block;
+	display: inline;
+	}
+
+nav a:hover {
+	display: block;
+	display: inline;
+	}
+	
+h1.pageHeader {
+	text-align: center;
+	font-size: 5vw;
+	margin: 0;
+	margin-bottom:1vh;
+    padding: 0;
+	}
+
+article {
+	border-left-style: solid;
+	border-color: dodgerblue;
+	background-color:lavender;
+	border-width: 0.5vw;
+	margin-left: 20vw;
+	margin-right: 20vw;
+	margin-bottom: 5vh;
+	padding: 0.5vw;
+}
+
+article h2 {
+	text-align: center;
+	margin: 0;
+	}
+
+
+article p.subheader {
+	text-align: center;
+	font-size: 1vw;
+	letter-spacing: 0.1vw;
+	padding-bottom:0.5vw;
+}
+
+article img {
+	max-width: 100%;
+}

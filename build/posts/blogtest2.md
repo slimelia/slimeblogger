@@ -1,4 +1,4 @@
-@title Hello Again! @author slimelia @date 2015-01-10
+@title Hello Again! @author author_name_here @date 2015-01-10
 
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae mi id libero pretium aliquet. Mauris semper leo ac ante pretium, a tempus arcu euismod. Aenean sed leo sit amet ipsum lacinia pulvinar. Suspendisse quis porttitor ante. Phasellus porta non lacus sed efficitur. Duis et vehicula metus, sed maximus erat. Maecenas vehicula elit lorem, id congue nisi ultrices vitae. Etiam sed purus eu ex sollicitudin pulvinar eget et leo. Suspendisse maximus sed massa eu lacinia. Phasellus vitae rhoncus turpis, vel porta ipsum. Donec finibus quis massa quis luctus.

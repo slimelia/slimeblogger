@@ -1,5 +1,11 @@
 # Pycache
 *__pycache__/
 
-# Public HTML files
-*public_html/
+# Personal blog  HTML files
+*public_html_slimelia/
+
+# Personal blog posts
+*posts_slimelia/
+
+# Personal blog templates
+*templates_slimelia/

@@ -14,3 +14,6 @@ Oh! Here is some *italic text*, and some **bold text** too!
 3. Hello!
 
 This is an [example link](http://example.com/)!
+
+As you can see, the blog posts are ordered **by date**!  
+Dates must follow a *YYYY-MM-DD* format, and the separators you use must be consistent!
