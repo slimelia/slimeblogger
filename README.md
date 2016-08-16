@@ -1,4 +1,4 @@
-# tilde.town/~slimelia
+# Slimelia's Blog Generator (SLIMEBLOGGER)
 This is the repository for the source code of my static blog generator I use for my [tilde.town website](http://tilde.town/~slimelia/). The code is a tiny bit messy but I'll pretend that it's just in keeping with tilde.town's brutalist nature!
 
 This generator takes markdown files and generates them into blogposts. It should work as it is, so long as you have the required packages, but I'd *highly* recommend editing the mustache templates in ```tilde.town-slimeblogger/build/templates/``` to customise your blog. Unless you think "Blog Title Here" would be a really deep and meta name for a blog, in which case no changes needed!
