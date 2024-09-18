@@ -4,8 +4,8 @@
 #
 # If field is empty, Atom feed will not be generated.
 
-rootURL = ""
-#rootURL = "https://example.com"
+#rootURL = ""
+rootURL = "https://example.com"
 
 # Title of blog as it will appear in Atom feed.
 title = "My Cool Blog"
