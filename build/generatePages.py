@@ -73,9 +73,11 @@ def generateAtomFeed(blogpostList,rootURL,title):
     for post in blogpostList:
         atomFeedEntry  = feedGen.add_entry()
         atomFeedEntry.title(post['title'])
-        atomFeedEntry.link(href=f'{rootURL}/{post["filename"]}', rel='alternate')
+        atomFeedEntry.link(href=f'{rootURL}/pages/{post["filename"]}', rel='alternate')
         atomFeedEntry.updated(f'{post["date"]}{TIMESTAMP_STRING}')
         atomFeedEntry.id(f'{rootURL}/pages/{post["filename"]}')
+        atomFeedEntry.content(post['body'],type="html")
+
     return feedGen
 
 
