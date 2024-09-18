@@ -26,4 +26,5 @@ Dates *MUST* be written as yyyy-mm-dd format, using a separator that is **consis
 Uses the following Python3 libraries:
   * [markdown](https://pythonhosted.org/Markdown/)
   * [pystache](https://github.com/defunkt/pystache)
-  * ~~BeautifulSoup4~~ (Currently disabled because it indented the html TOO MUCH) 
+  * [feedgen](https://github.com/lkiesow/python-feedgen)
+  * ~~BeautifulSoup4~~ (Currently disabled because it indented the html TOO MUCH)
