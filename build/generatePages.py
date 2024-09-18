@@ -9,6 +9,7 @@ from feedgen.feed import FeedGenerator
 from feedgen.entry import FeedEntry
 import tomllib
 
+TIMESTAMP_STRING: str = 'T12:00:00Z'
 
 def getBlogpostsFromDir(dirOfPosts):
     blogParser = blogpostParser.blogpostParser()
@@ -63,10 +64,21 @@ def generateBlogPages(dirToWriteTo,blogpostList,templates):
         fileHandler.write(siteHtml)
         fileHandler.close()
 
-def generateAtomFeed(blogpostList,rootURL):
+def generateAtomFeed(blogpostList,rootURL,title):
     feedGen  = FeedGenerator()
     feedGen.title(title)
     feedGen.link(href=rootURL, rel='alternate')
+    feedGen.id(rootURL)
+    feedGen.updated(f'{blogpostList[0]["date"]}{TIMESTAMP_STRING}')
+    for post in blogpostList:
+        atomFeedEntry  = feedGen.add_entry()
+        atomFeedEntry.title(post['title'])
+        atomFeedEntry.link(href=f'{rootURL}/{post["filename"]}', rel='alternate')
+        atomFeedEntry.updated(f'{post["date"]}{TIMESTAMP_STRING}')
+        atomFeedEntry.id(f'{rootURL}/pages/{post["filename"]}')
+    return feedGen
+
+
 
 
 
@@ -82,6 +94,7 @@ def generateSite(siteTemplateLocation,content):
 if __name__ == "__main__":
     postDir = "posts"
     dirForPages = "../public_html/pages"
+    dirForFeed = "../public_html"
     postTemplate = "templates/blogpost.mustache"
     siteTemplate = "templates/site.mustache"
     templates = [postTemplate,siteTemplate]
@@ -94,11 +107,12 @@ if __name__ == "__main__":
         config = tomllib.load(file)
 
     rootURL = config.get("rootURL","")
+    title = config.get("title","My Cool Blog")
     feedIncluded = False
     if len(rootURL) > 0:
-        feed = generateAtomFeed(postList,rootURL)
+        feed = generateAtomFeed(postList,rootURL,title)
         feedIncluded = True
-
+        feed.atom_file(f'{dirForFeed}/atom.xml')
 
 
 
