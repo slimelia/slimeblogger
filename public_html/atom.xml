@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns="http://www.w3.org/2005/Atom"><id>https://example.com</id><title>My Cool Blog</title><updated>2016-05-12T12:00:00+00:00</updated><link href="https://example.com/atom.xml" rel="alternate"/><generator uri="https://lkiesow.github.io/python-feedgen" version="1.0.0">python-feedgen</generator><entry><id>https://example.com/pages/blogtest2.html</id><title>Hello Again!</title><updated>2015-01-10T12:00:00+00:00</updated><content type="html">&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vitae mi id libero pretium aliquet. Mauris semper leo ac ante pretium, a tempus arcu euismod. Aenean sed leo sit amet ipsum lacinia pulvinar. Suspendisse quis porttitor ante. Phasellus porta non lacus sed efficitur. Duis et vehicula metus, sed maximus erat. Maecenas vehicula elit lorem, id congue nisi ultrices vitae. Etiam sed purus eu ex sollicitudin pulvinar eget et leo. Suspendisse maximus sed massa eu lacinia. Phasellus vitae rhoncus turpis, vel porta ipsum. Donec finibus quis massa quis luctus.&lt;/p&gt;
+&lt;p&gt;Fusce mollis orci eu mauris tristique laoreet. Etiam molestie, augue quis vehicula facilisis, turpis nibh ullamcorper tortor, ut condimentum massa lorem vitae justo. Etiam vitae venenatis ante, non condimentum purus. Morbi mattis eleifend auctor. Sed ultrices porttitor lectus, et laoreet augue pellentesque quis. Aliquam nibh leo, aliquet nec erat vel, ultricies sagittis ex. Morbi id lectus pharetra, tempus augue at, tempor mauris. Maecenas in dui sapien. Aliquam pulvinar facilisis ipsum vel volutpat.&lt;/p&gt;
+&lt;p&gt;Nam eget lacinia nunc. Suspendisse eleifend sapien nisl, ut tempor dui pulvinar a. Vivamus ligula felis, dapibus et nunc ut, luctus tempus nisl. Nullam nec efficitur diam. Vivamus tincidunt dignissim odio commodo auctor. Vestibulum blandit turpis non finibus mollis. Vivamus feugiat justo nunc, quis mattis urna laoreet a. Phasellus id quam vel sem vulputate dignissim. &lt;/p&gt;</content><link href="https://example.com/pages/blogtest2.html"/></entry><entry><id>https://example.com/pages/blogtest.html</id><title>Title Goes Here</title><updated>2016-05-11T12:00:00+00:00</updated><content type="html">&lt;p&gt;The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick quartz, vex nymphs.&lt;/p&gt;
+&lt;p&gt;Waltz, bad nymph, for quick jigs vex! Fox nymphs grab quick-jived waltz. Brick quiz whangs jumpy veldt fox. Bright vixens jump; dozy fowl quack.&lt;/p&gt;
+&lt;p&gt;Quick wafting zephyrs vex bold Jim. Quick zephyrs blow, vexing daft Jim. Sex-charged fop blew my junk TV quiz. How quickly daft jumping zebras vex. Two driven jocks help fax my big quiz. Quick, Baz, get my woven flax jodhpurs! "Now fax quiz Jack! " my brave &lt;/p&gt;</content><link href="https://example.com/pages/blogtest.html"/></entry><entry><id>https://example.com/pages/example.html</id><title>Title Goes Here</title><updated>2016-05-12T12:00:00+00:00</updated><content type="html">&lt;p&gt;The body is plain text, right here!&lt;/p&gt;
+&lt;p&gt;Hello! I'm another paragraph!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Unordered lists look like this!&lt;/li&gt;
+&lt;li&gt;See?&lt;/li&gt;
+&lt;li&gt;Cool!&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Oh! Here is some &lt;em&gt;italic text&lt;/em&gt;, and some &lt;strong&gt;bold text&lt;/strong&gt; too! &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;We have ordered lists too!&lt;/li&gt;
+&lt;li&gt;I'm in numeric order!&lt;/li&gt;
+&lt;li&gt;Hello!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This is an &lt;a href="http://example.com/"&gt;example link&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;As you can see, the blog posts are ordered &lt;strong&gt;by date&lt;/strong&gt;!&lt;br /&gt;
+Dates must follow a &lt;em&gt;YYYY-MM-DD&lt;/em&gt; format, and the separators you use must be consistent!&lt;/p&gt;</content><link href="https://example.com/pages/example.html"/></entry></feed>

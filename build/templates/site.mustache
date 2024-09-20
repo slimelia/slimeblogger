@@ -2,27 +2,28 @@
 
 <meta http-equiv="cache-control" content="no-cache" />
 <meta charset="utf-8"/>
-<link rel="stylesheet" type="text/css" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="{{relativelink}}style.css"/>
+<link rel="alternate" type="application/atom+xml" href="{{rootURL}}/atom.xml" title="{{feedtitle}}"/>
 
 <title>Hello World!</title>
 
 <header>
-	<h1 class="pageHeader">Blog Header Here</h1>
-	<nav>
-		<ul>
-			<li><a href="index.html">index</a> |</li>
-			<li><a href="">link1</a> |</li>
-			<li><a href="">link2</a> |</li>
-			<li><a href="">link3</a> |</li>
-			<li><a href="">link4</a> |</li>
-			<li><a href="">link5 etc.</a></li>
-			<li><a href="atom.xml">RSS Feed (Atom)</a></li>
-		</ul>
-	</nav>
+    <h1 class="pageHeader">Blog Header Here</h1>
+    <nav>
+        <ul>
+            <li><a href="{{relativelink}}index.html">index</a> |</li>
+            <li><a href="">link1</a> |</li>
+            <li><a href="">link2</a> |</li>
+            <li><a href="">link3</a> |</li>
+            <li><a href="">link4</a> |</li>
+            <li><a href="">link5</a>|</li>
+            <li><a href="{{relativelink}}atom.xml">RSS Feed (Atom)</a></li>
+        </ul>
+    </nav>
 </header>
 
 <main>
-	{{#content}}
-		{{{post}}}
-	{{/content}}
+    {{#content}}
+        {{{post}}}
+    {{/content}}
 </main>

@@ -2,7 +2,7 @@
 
 import os
 import markdown
-import pystache
+import chevron
 #import bs4
 import blogpostParser
 from feedgen.feed import FeedGenerator
@@ -44,18 +44,23 @@ def generateBlogpostObj(blogpostTemplateLocation,blogpost):
     blogpostTemplate = fileHandler.read()
     fileHandler.close()
 
-    generatedBlogpost = pystache.render(blogpostTemplate,blogpost)
+    generatedBlogpost = chevron.render(blogpostTemplate,blogpost)
     blogpostObj = {"post":generatedBlogpost}
 
     return blogpostObj
 
-def generateBlogPages(dirToWriteTo,blogpostList,templates):
+def generateBlogPages(dirToWriteTo,blogpostList,templates,rootURL,feedtitle):
     POST_TEMPLATE = templates[0]
     SITE_TEMPLATE = templates[1]
 
     for blogpostObj in blogpostList:
         blogpost = generateBlogpostObj(POST_TEMPLATE,blogpostObj)
-        siteContent = {"content":[blogpost]}
+        siteContent = {
+        "relativelink":"../",
+        "rootURL":rootURL,
+        "feedtitle":feedtitle,
+        "content":[blogpost]
+        }
         siteHtml = generateSite(SITE_TEMPLATE,siteContent)
 #       parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
 
@@ -89,7 +94,7 @@ def generateSite(siteTemplateLocation,content):
     siteTemplate = fileHandler.read()
     fileHandler.close()
 
-    generatedSite = pystache.render(siteTemplate,content)
+    generatedSite = chevron.render(siteTemplate,content)
 
     return generatedSite
 
@@ -99,26 +104,30 @@ if __name__ == "__main__":
     dirForFeed = "../public_html"
     postTemplate = "templates/blogpost.mustache"
     siteTemplate = "templates/site.mustache"
+
     templates = [postTemplate,siteTemplate]
 
     postList = getBlogpostsFromDir(postDir)
-
-    generateBlogPages(dirForPages,postList,templates)
 
     with open("config.toml","rb") as file:
         config = tomllib.load(file)
 
     rootURL = config.get("rootURL","")
-    title = config.get("title","My Cool Blog")
+    feedtitle = config.get("title","My Cool Blog")
     feedIncluded = False
     if len(rootURL) > 0:
-        feed = generateAtomFeed(postList,rootURL,title)
+        feed = generateAtomFeed(postList,rootURL,feedtitle)
         feedIncluded = True
         feed.atom_file(f'{dirForFeed}/atom.xml')
 
+    generateBlogPages(dirForPages,postList,templates,rootURL,feedtitle)
 
-
-    index_content = {"content":[]}
+    index_content = {
+    "relativelink":"",
+    "rootURL":rootURL,
+    "feedtitle":feedtitle,
+    "content":[]
+    }
     for post in postList:
         index_content["content"].append(generateBlogpostObj(postTemplate,post))
 
