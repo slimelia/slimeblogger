@@ -2,7 +2,7 @@
 *__pycache__/
 
 # HTML files
-public_html/*.html
+public_html/*
 
 # Include pages folder
 !public_html/pages/
