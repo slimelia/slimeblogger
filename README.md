@@ -1,5 +1,5 @@
 # Slimelia's Blog Generator (SLIMEBLOGGER)
-Static blog generator with Atom feed, as used on my [tilde.town page]("https://tilde.town/~slimelia").
+Static blog generator with Atom feed, as used on my [tilde.town page](https://tilde.town/~slimelia).
 
 Takes Markdown posts, spits out HTML. Easy peasy lemon squeezy!
 
