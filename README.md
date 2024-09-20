@@ -3,6 +3,8 @@ Static blog generator with Atom feed, as used on my [tilde.town page](https://ti
 
 Takes Markdown posts, spits out HTML. Easy peasy lemon squeezy!
 
+⚠️ **Requires Python 3.11 or greater!**
+
 
 ## How To Use
 
