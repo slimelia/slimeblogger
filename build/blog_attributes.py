@@ -45,7 +45,7 @@ class BlogAttributes:
 if __name__ == "__main__":
     exampleString: str = "@title Example Title @author slimelia"\
                          " @date 2024-01-01T11:59"
-    exampleBlogAttrs = BlogAttributes(exampleString)
+    exampleBlogAttrs: BlogAttributes = BlogAttributes(exampleString)
     print(f"Title: {exampleBlogAttrs.title}\nAuthor:"
           f" {exampleBlogAttrs.author}\n"
           f"Date: {exampleBlogAttrs.date:%Y-%m-%d}")
