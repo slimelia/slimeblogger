@@ -1,6 +1,11 @@
 # Pycache
 *__pycache__/
 
+# mypy
+*.mypy_cache/
+*.dmypy.json
+*dmypy.json
+
 # HTML files
 public_html/*
 
@@ -9,4 +14,3 @@ public_html/*
 
 # Include CSS file
 !*style.css
-
