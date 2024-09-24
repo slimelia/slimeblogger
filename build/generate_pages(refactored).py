@@ -1,40 +1,55 @@
 #!/usr/bin/env python3
 
 import os
-import markdown
 import chevron
-#import bs4
-import blogpostParser
+from markdown import markdown
+from blog_attributes import BlogAttributes
 from feedgen.feed import FeedGenerator
 from feedgen.entry import FeedEntry
+from datetime import datetime
+from collections.abc import Mapping
+from pathlib import Path
+from operator import attrgetter
 import tomllib
 
 TIMESTAMP_STRING: str = 'T12:00:00Z'
 
-def getBlogpostsFromDir(dirOfPosts):
-    blogParser = blogpostParser.blogpostParser()
-    blogpostList = []
+class BlogPost(Mapping):
+    filename: str
+    title: str
+    author: str
+    date: str
+    true_date: datetime
 
+def blog_post_dict(filename: str, title: str, author: str,
+                   date: datetime, body: str) -> BlogPost:
+    return {
+        "filename": filename,
+        "title": title.title(),
+        "author": author,
+        "date": f"{date:%Y-%m-%d}",
+        "true_date": date,
+        "body": body
+    }
 
-    for filename in os.listdir(dirOfPosts):
-        if filename[-3:] == ".md":
-            blogpostDict = {}
-            fileHandler = open(f"{dirOfPosts}/{filename}",'r',encoding='utf-8')
-            lineToParse = fileHandler.readline()
-            blogpostDict["body"] = markdown.markdown(fileHandler.read())
-            fileHandler.close()
+def get_posts(post_path: str) -> list[dict[str,str]]:
+    directory: Path = Path(post_path)
+    post_list: list[dict] = list()
+    file: Path
+    for file in directory.iterdir():
+        if file.suffix  == ".md":
+            with open(file.resolve(),'r',encoding='utf-8') as doc:
+                first_line: str = doc.readline()
+                post_body:  = markdown(doc.read())
+            attributes: BlogAttributes  = BlogAttributes(first_line)
+            filename = file.stem + ".html"
+            post: BlogPost = blog_post_dict(filename, attributes.title,
+                                            attributes.author, attributes.date,
+                                            post_body)
+            post_list.append(post)
+    post_list.sort(key=attrgetter("true_date"), reverse=True)
+    return post_list
 
-            blogpostDict['filename'] = filename.replace(".md",".html")
-
-            blogpostAttributes = blogParser.splitBlogStringToDict(lineToParse)
-            blogpostAttributes["title"] = blogpostAttributes["title"].title()
-            blogpostDict.update(blogpostAttributes)
-
-            blogpostList.append(blogpostDict)
-
-    blogpostList.sort(key=lambda postInList: postInList['date'],reverse=True)
-
-    return blogpostList
 
 def generateBlogpostObj(blogpostTemplateLocation,blogpost):
     posts = []
