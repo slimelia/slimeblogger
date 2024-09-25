@@ -10,15 +10,15 @@ class BlogGenerator:
     """
 
     def __init__(self, path_string: str):
-        self.template: str = self.open_template(path_string)
+        self._template: str = self._open_template(path_string)
 
-    def open_template(self, path_string: str) -> str:
+    def _open_template(self, path_string: str) -> str:
         """Open template file, return contents
         """
         with open(path_string, 'r', encoding='utf-8') as file:
             return file.read()
 
-    def generate_post(self, content: dict[str, str]) -> str:
+    def generate_page(self, content: dict[str, str]) -> str:
         """Run Chevron renderer with saved template
         """
-        return chevron.render(self.template, content)
+        return chevron.render(self._template, content)

@@ -10,9 +10,8 @@ from datetime import datetime
 from collections.abc import Mapping
 from pathlib import Path
 from operator import attrgetter
+from functools import partial
 import tomllib
-
-TIMESTAMP_STRING: str = 'T12:00:00Z'
 
 class BlogPost(Mapping):
     filename: str
@@ -49,6 +48,13 @@ def get_posts(post_path: str) -> list[dict[str,str]]:
             post_list.append(post)
     post_list.sort(key=attrgetter("true_date"), reverse=True)
     return post_list
+
+def generate_page(path_string: str, content: dict[str, str]) -> str:
+    """Run Chevron renderer with provided template
+    """
+    with open(path_string, 'r', encoding='utf-8') as file:
+        template: str = file.read()
+    return chevron.render(template, content)
 
 
 def generateBlogpostObj(blogpostTemplateLocation,blogpost):
@@ -120,10 +126,13 @@ if __name__ == "__main__":
     postDir = "posts"
     dirForPages = "../public_html/pages"
     dirForFeed = "../public_html"
-    postTemplate = "templates/blogpost.mustache"
-    siteTemplate = "templates/site.mustache"
+    post_template = "templates/blogpost.mustache"
+    site_template = "templates/site.mustache"
 
-    templates = [postTemplate,siteTemplate]
+    site_generator = partial(generate_page,path_string=site_template)
+    site_generator.__doc__ = "Render site.mustache with given dict"
+    post_generator = partial(generate_page,path_string=post_template)
+    post_template.__doc__ = "Render blogpost.mustache with given dict"
 
     postList = getBlogpostsFromDir(postDir)
 
@@ -147,9 +156,9 @@ if __name__ == "__main__":
     "content":[]
     }
     for post in postList:
-        index_content["content"].append(generateBlogpostObj(postTemplate,post))
+        index_content["content"].append(generateBlogpostObj(post_template,post))
 
-    siteHtml = generateSite(siteTemplate,index_content)
+    siteHtml = generateSite(site_template,index_content)
 #   parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
 
     index_html = open('../public_html/index.html',"w")
