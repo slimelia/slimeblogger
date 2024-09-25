@@ -6,7 +6,6 @@ from markdown import markdown
 from feedgen.feed import FeedGenerator
 from feedgen.entry import FeedEntry
 from datetime import datetime
-from collections.abc import Mapping, Callable
 from operator import attrgetter
 from functools import partial
 import tomllib
@@ -18,8 +17,8 @@ def prepare_post(template: str, post: dict[str, str]) -> dict[str, str]:
     rendered_post: str = rn.render(template, post)
     return p.package_post(rendered_post)
 
-def prepare_page(template: str, content:dict[str, str]) -> str:
-    rendered_page: str = rn.render(template, post)
+def create_post_pages(*args:dict[str,str]) -> list[str]:
+
 
 
 
@@ -68,6 +67,7 @@ def main() -> None:
 
     inner_posts: list[dict[str,str]] = p.get_post_dicts(c.POST_DIR)
     rendered_posts = [prepare_post(ip) for ip in inner_posts]
+
 
 
 

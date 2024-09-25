@@ -3,6 +3,7 @@
 from pathlib import Path
 from blog_attributes import BlogAttributes
 from markdown import markdown
+from collections.abc import Mapping
 
 
 class BlogPost(Mapping):
