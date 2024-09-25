@@ -4,6 +4,8 @@ from pathlib import Path
 from blog_attributes import BlogAttributes
 from markdown import markdown
 from collections.abc import Mapping
+from datetime import datetime
+from operator import itemgetter
 
 
 class BlogPost(Mapping):
@@ -32,14 +34,14 @@ def get_post_dicts(post_path: str) -> list[dict[str,str]]:
         if file.suffix  == ".md":
             with open(file.resolve(),'r',encoding='utf-8') as doc:
                 first_line: str = doc.readline()
-                post_body:  = markdown(doc.read())
+                post_body: str = markdown(doc.read())
             attributes: BlogAttributes  = BlogAttributes(first_line)
             filename: str = file.stem + ".html"
             post: BlogPost = blog_post_dict(filename, attributes.title,
                                             attributes.author, attributes.date,
                                             post_body)
             post_list.append(post)
-    post_list.sort(key=attrgetter("true_date"), reverse=True)
+    post_list.sort(key=itemgetter("true_date"), reverse=True)
     return post_list
 
 def package_post(post: str) -> dict[str, str]:

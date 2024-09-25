@@ -1,140 +1,72 @@
 #!/usr/bin/env python3
 
 import os
-import markdown
 import chevron
-#import bs4
-import blogpostParser
+from markdown import markdown
 from feedgen.feed import FeedGenerator
 from feedgen.entry import FeedEntry
+from functools import partial
+from collections.abc import Iterator
 import tomllib
-
-TIMESTAMP_STRING: str = 'T12:00:00Z'
-
-def getBlogpostsFromDir(dirOfPosts):
-    blogParser = blogpostParser.blogpostParser()
-    blogpostList = []
+import constants as c
+import postutils as p
+from pageutils import page_dict,PageDict
+import renderutils as rn
 
 
-    for filename in os.listdir(dirOfPosts):
-        if filename[-3:] == ".md":
-            blogpostDict = {}
-            fileHandler = open(f"{dirOfPosts}/{filename}",'r',encoding='utf-8')
-            lineToParse = fileHandler.readline()
-            blogpostDict["body"] = markdown.markdown(fileHandler.read())
-            fileHandler.close()
+def prepare_post(template: str, post: dict[str, str]) -> dict[str, str]:
+    rendered_post: str = rn.render(template, post)
+    return p.package_post(rendered_post)
 
-            blogpostDict['filename'] = filename.replace(".md",".html")
+def create_post_pages(posts: Iterator[dict[str,str]], config: dict[str, str], post_template: str, site_template: str, pages_dir: str) -> list[dict[str, str]]:
+    rendered_posts: list[dict[str, str]] = []
+    for post in posts:
+        prepared_post: dict[str, str] = prepare_post(post_template, post)
+        rendered_post = post.copy()
+        rendered_post["post"] = prepared_post.get("post")
+        rendered_posts.append(rendered_post)
+        page_content: dict[str, str] = page_dict("../",config.get("rootURL"),config.get("title"),prepared_post)
+        webpage = rn.render(site_template, page_content)
+        with open(f"{pages_dir}/{post.get("filename")}","w", encoding="utf-8") as html_page:
+            html_page.write(webpage)
+    return rendered_posts
 
-            blogpostAttributes = blogParser.splitBlogStringToDict(lineToParse)
-            blogpostAttributes["title"] = blogpostAttributes["title"].title()
-            blogpostDict.update(blogpostAttributes)
-
-            blogpostList.append(blogpostDict)
-
-    blogpostList.sort(key=lambda postInList: postInList['date'],reverse=True)
-
-    return blogpostList
-
-def generateBlogpostObj(blogpostTemplateLocation,blogpost):
-    posts = []
-    content = {}
-
-    fileHandler = open(blogpostTemplateLocation,"r")
-    blogpostTemplate = fileHandler.read()
-    fileHandler.close()
-
-    generatedBlogpost = chevron.render(blogpostTemplate,blogpost)
-    blogpostObj = {"post":generatedBlogpost}
-
-    return blogpostObj
-
-def generateBlogPages(dirToWriteTo,blogpostList,templates,rootURL,feedtitle):
-    POST_TEMPLATE = templates[0]
-    SITE_TEMPLATE = templates[1]
-
-    for blogpostObj in blogpostList:
-        blogpost = generateBlogpostObj(POST_TEMPLATE,blogpostObj)
-        siteContent = {
-        "relativelink":"../",
-        "rootURL":rootURL,
-        "feedtitle":feedtitle,
-        "content":[blogpost]
-        }
-        siteHtml = generateSite(SITE_TEMPLATE,siteContent)
-#       parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
-
-        fileHandler = open(f"{dirToWriteTo}/{blogpostObj['filename']}","w")
-#       fileHandler.write(parsedSiteHtml.prettify())
-        fileHandler.write(siteHtml)
-        fileHandler.close()
-
-def generateAtomFeed(blogpostList,rootURL,title):
-    feedGen  = FeedGenerator()
-    feedGen.title(title)
-    feedGen.link(href=f"{rootURL}/atom.xml", rel='alternate')
-    feedGen.id(rootURL)
-    feedGen.updated(f'{blogpostList[0]["date"]}{TIMESTAMP_STRING}')
-    for post in blogpostList:
-        atomFeedEntry  = feedGen.add_entry()
-        atomFeedEntry.title(post['title'])
-        atomFeedEntry.link(href=f'{rootURL}/pages/{post["filename"]}', rel='alternate')
-        atomFeedEntry.updated(f'{post["date"]}{TIMESTAMP_STRING}')
-        atomFeedEntry.id(f'{rootURL}/pages/{post["filename"]}')
-        atomFeedEntry.content(post['body'],type="html")
-
-    return feedGen
+def generate_index(index_path: str, template: str, config: dict[str, str], posts: list[dict[str, str]]) -> None:
+    index = page_dict("",config.get("rootURL"),config.get("title"))
+    index["content"] = posts.copy()
+    index_html = rn.render(template, index)
+    with open(index_path,"w", encoding="utf-8") as index_file:
+        index_file.write(index_html)
 
 
+def generate_atom_feed(posts: list[str], config: dict[str, str]) -> FeedGenerator:
+    feed_gen: FeedGenerator  = FeedGenerator()
+    title: str = config.get("title","My Cool Blog")
+    filename: str = config.get("filename")
+    root_url: str = config.get("rootURL")
+    feed_gen.title(title)
+    feed_gen.link(href=f"{root_url}/atom.xml", rel='alternate')
+    feed_gen.id(root_url)
+    for post in posts:
+        feed_entry = feed_gen.add_entry()
+        feed_entry.title(post.get("title"))
+        feed_entry.link(href=f"{root_url}/pages/{filename}", rel="alternate")
+        date = post.get("true_date")
+        feed_entry.updated(f"{date:%Y-%m-%dT%H:%M}Z")
+        feed_entry.id(f"{root_url}/page/{filename}")
+        feed_entry.content(post.get("body"),type="html")
+    return feed_gen
 
 
-
-def generateSite(siteTemplateLocation,content):
-    fileHandler = open(siteTemplateLocation,"r")
-    siteTemplate = fileHandler.read()
-    fileHandler.close()
-
-    generatedSite = chevron.render(siteTemplate,content)
-
-    return generatedSite
+def main() -> None:
+    with open(c.CONFIG_TOML,"rb") as file:
+        config: str = tomllib.load(file)
+    inner_posts: list[dict[str,str]] = p.get_post_dicts(c.POST_DIR)
+    rendered_posts: list[dict[str, str]] = create_post_pages((ip for ip in inner_posts),config,c.POST_TEMPLATE,c.SITE_TEMPLATE,c.PAGES_DIR)
+    if len(root_url := config.get("rootURL")) > 0:
+        feed = generate_atom_feed(rendered_posts, config)
+        feed.atom_file(f"{c.FEED_DIR}/atom.xml")
+    generate_index(c.INDEX_PATH, c.SITE_TEMPLATE, config, rendered_posts)
 
 if __name__ == "__main__":
-    postDir = "posts"
-    dirForPages = "../public_html/pages"
-    dirForFeed = "../public_html"
-    postTemplate = "templates/blogpost.mustache"
-    siteTemplate = "templates/site.mustache"
-
-    templates = [postTemplate,siteTemplate]
-
-    postList = getBlogpostsFromDir(postDir)
-
-    with open("config.toml","rb") as file:
-        config = tomllib.load(file)
-
-    rootURL = config.get("rootURL","")
-    feedtitle = config.get("title","My Cool Blog")
-    feedIncluded = False
-    if len(rootURL) > 0:
-        feed = generateAtomFeed(postList,rootURL,feedtitle)
-        feedIncluded = True
-        feed.atom_file(f'{dirForFeed}/atom.xml')
-
-    generateBlogPages(dirForPages,postList,templates,rootURL,feedtitle)
-
-    index_content = {
-    "relativelink":"",
-    "rootURL":rootURL,
-    "feedtitle":feedtitle,
-    "content":[]
-    }
-    for post in postList:
-        index_content["content"].append(generateBlogpostObj(postTemplate,post))
-
-    siteHtml = generateSite(siteTemplate,index_content)
-#   parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
-
-    index_html = open('../public_html/index.html',"w")
-#   index_html.write(parsedSiteHtml.prettify())
-    index_html.write(siteHtml)
-    index_html.close()
+    main()
