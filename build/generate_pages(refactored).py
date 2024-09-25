@@ -8,41 +8,31 @@ from feedgen.entry import FeedEntry
 from datetime import datetime
 from operator import attrgetter
 from functools import partial
+from collections.abc import Iterator
 import tomllib
 import constants as c
 import postutils as p
+from pageutils import page_dict,PageDict
 import renderutils as rn
+
+TIMESTAMP_STRING: str = 'T12:00'
 
 def prepare_post(template: str, post: dict[str, str]) -> dict[str, str]:
     rendered_post: str = rn.render(template, post)
     return p.package_post(rendered_post)
 
-def create_post_pages(*args:dict[str,str]) -> list[str]:
+def create_post_pages(posts: Generator[dict[str,str]], config: dict[str, str], template: str, pages_dir: str) -> list[str]:
+    rendered_posts: list[str] = []
+    for post in posts:
+        rendered_posts.append(post)
+        prepared_post: dict[str, str] = prepare_post(post)
+        page_content: dict[str, str] = page_dict("../",config.get("rootURL"),config.get("title"),prepared_post)
+        webpage = rn.render(template, page_content)
+        with open(f"{pages_dir}/{post.get("filename")}","w", encoding="utf-8") as html_page:
+            html_page.write(webpage)
+    return rendered_posts
 
 
-
-
-
-
-def generateBlogPages(dirToWriteTo,blogpostList,templates,rootURL,feedtitle):
-    POST_TEMPLATE = templates[0]
-    SITE_TEMPLATE = templates[1]
-
-    for blogpostObj in blogpostList:
-        blogpost = generateBlogpostObj(POST_TEMPLATE,blogpostObj)
-        siteContent = {
-        "relativelink":"../",
-        "rootURL":rootURL,
-        "feedtitle":feedtitle,
-        "content":[blogpost]
-        }
-        siteHtml = generateSite(SITE_TEMPLATE,siteContent)
-#       parsedSiteHtml = bs4.BeautifulSoup(siteHtml, 'html.parser')
-
-        fileHandler = open(f"{dirToWriteTo}/{blogpostObj['filename']}","w")
-#       fileHandler.write(parsedSiteHtml.prettify())
-        fileHandler.write(siteHtml)
-        fileHandler.close()
 
 def generateAtomFeed(blogpostList,rootURL,title):
     feedGen  = FeedGenerator()
@@ -64,9 +54,11 @@ def generateAtomFeed(blogpostList,rootURL,title):
 def main() -> None:
     with open(c.CONFIG_TOML,"rb") as file:
         config: str = tomllib.load(file)
-
     inner_posts: list[dict[str,str]] = p.get_post_dicts(c.POST_DIR)
-    rendered_posts = [prepare_post(ip) for ip in inner_posts]
+    rendered_posts: list[str] = create_post_pages(ip for ip in inner_posts)
+    #TODO: Atom feed generation here
+
+
 
 
 
