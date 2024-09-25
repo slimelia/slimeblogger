@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Wrapper for Chevron renderer. Opens provided template and renders document.
+"""
 
 import chevron
 
