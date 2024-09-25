@@ -3,72 +3,27 @@
 import os
 import chevron
 from markdown import markdown
-from blog_attributes import BlogAttributes
 from feedgen.feed import FeedGenerator
 from feedgen.entry import FeedEntry
 from datetime import datetime
-from collections.abc import Mapping
-from pathlib import Path
+from collections.abc import Mapping, Callable
 from operator import attrgetter
 from functools import partial
 import tomllib
+import constants as c
+import postutils as p
+import renderutils as rn
 
-class BlogPost(Mapping):
-    filename: str
-    title: str
-    author: str
-    date: str
-    true_date: datetime
+def prepare_post(template: str, post: dict[str, str]) -> dict[str, str]:
+    rendered_post: str = rn.render(template, post)
+    return p.package_post(rendered_post)
 
-def blog_post_dict(filename: str, title: str, author: str,
-                   date: datetime, body: str) -> BlogPost:
-    return {
-        "filename": filename,
-        "title": title.title(),
-        "author": author,
-        "date": f"{date:%Y-%m-%d}",
-        "true_date": date,
-        "body": body
-    }
-
-def get_posts(post_path: str) -> list[dict[str,str]]:
-    directory: Path = Path(post_path)
-    post_list: list[dict] = list()
-    file: Path
-    for file in directory.iterdir():
-        if file.suffix  == ".md":
-            with open(file.resolve(),'r',encoding='utf-8') as doc:
-                first_line: str = doc.readline()
-                post_body:  = markdown(doc.read())
-            attributes: BlogAttributes  = BlogAttributes(first_line)
-            filename = file.stem + ".html"
-            post: BlogPost = blog_post_dict(filename, attributes.title,
-                                            attributes.author, attributes.date,
-                                            post_body)
-            post_list.append(post)
-    post_list.sort(key=attrgetter("true_date"), reverse=True)
-    return post_list
-
-def generate_page(path_string: str, content: dict[str, str]) -> str:
-    """Run Chevron renderer with provided template
-    """
-    with open(path_string, 'r', encoding='utf-8') as file:
-        template: str = file.read()
-    return chevron.render(template, content)
+def prepare_page(template: str, content:dict[str, str]) -> str:
+    rendered_page: str = rn.render(template, post)
 
 
-def generateBlogpostObj(blogpostTemplateLocation,blogpost):
-    posts = []
-    content = {}
 
-    fileHandler = open(blogpostTemplateLocation,"r")
-    blogpostTemplate = fileHandler.read()
-    fileHandler.close()
 
-    generatedBlogpost = chevron.render(blogpostTemplate,blogpost)
-    blogpostObj = {"post":generatedBlogpost}
-
-    return blogpostObj
 
 def generateBlogPages(dirToWriteTo,blogpostList,templates,rootURL,feedtitle):
     POST_TEMPLATE = templates[0]
@@ -106,21 +61,19 @@ def generateAtomFeed(blogpostList,rootURL,title):
 
     return feedGen
 
-def generateSite(siteTemplateLocation,content):
-    fileHandler = open(siteTemplateLocation,"r")
-    siteTemplate = fileHandler.read()
-    fileHandler.close()
-
-    generatedSite = chevron.render(siteTemplate,content)
-
-    return generatedSite
 
 def main() -> None:
-    POST_DIR  = "posts"
-    PAGES_DIR = "../public_html/pages"
-    FEED_DIR = "../public_html"
-    POST_TEMPLATE = "templates/blogpost.mustache"
-    SITE_TEMPLATE = "templates/site.mustache"
+    with open(c.CONFIG_TOML,"rb") as file:
+        config: str = tomllib.load(file)
+
+    inner_posts: list[dict[str,str]] = p.get_post_dicts(c.POST_DIR)
+    rendered_posts = [prepare_post(ip) for ip in inner_posts]
+
+
+
+
+
+
 
 if __name__ == "__main__":
     postDir = "posts"
@@ -128,11 +81,6 @@ if __name__ == "__main__":
     dirForFeed = "../public_html"
     post_template = "templates/blogpost.mustache"
     site_template = "templates/site.mustache"
-
-    site_generator = partial(generate_page,path_string=site_template)
-    site_generator.__doc__ = "Render site.mustache with given dict"
-    post_generator = partial(generate_page,path_string=post_template)
-    post_template.__doc__ = "Render blogpost.mustache with given dict"
 
     postList = getBlogpostsFromDir(postDir)
 
