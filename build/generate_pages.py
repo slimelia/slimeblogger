@@ -50,7 +50,6 @@ def generate_atom_feed(posts, config):
     a FeedGenerator object."""
     feed_gen = FeedGenerator()
     title = config.get("title", "My Cool Blog")
-    filename = config.get("filename", "")
     root_url = config.get("rootURL", "")
     feed_gen.title(title)
     feed_gen.link(href=f"{root_url}/atom.xml", rel='alternate')
@@ -58,6 +57,7 @@ def generate_atom_feed(posts, config):
     for post in posts:
         feed_entry = feed_gen.add_entry()
         feed_entry.title(post.get("title", ""))
+        filename = post.get("filename", "")
         feed_entry.link(href=f"{root_url}/pages/{filename}", rel="alternate")
         date = post.get("true_date")
         feed_entry.updated(f"{date:%Y-%m-%dT%H:%M}Z")
