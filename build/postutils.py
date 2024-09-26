@@ -47,6 +47,6 @@ def get_post_dicts(post_path: str) -> list[Mapping[str, str | datetime]]:
     return post_list
 
 
-def package_post(post: str) -> dict[str, str]:
+def package_post(post: str | None) -> dict[str, str | None]:
     """Take blog post and return in dict format required for site template."""
     return {"post": post}

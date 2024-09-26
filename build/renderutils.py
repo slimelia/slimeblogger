@@ -5,7 +5,7 @@
 import chevron
 
 
-def render(path_string: str, content: dict[str, str]) -> str:
+def render(path_string: str, content: dict[str, str | None]) -> str:
     """Run Chevron renderer with provided template
     """
     with open(path_string, 'r', encoding='utf-8') as file:

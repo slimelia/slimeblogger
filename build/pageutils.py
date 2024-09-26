@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Utilities relating to generating Slimeblogger webpages"""
 
-from collections.abc import Mapping
 
-
-def page_dict(relative_link: str, root_url: str, feed_title: str,
+def page_dict(relative_link: str, root_url: str | None, feed_title: str | None,
               content: dict[str, str] | None = None
-              ) -> Mapping[str, str | list[dict[str, str]]]:
+              ) -> dict[str, str | None | list[dict[str, str]]]:
     """Return a Slimeblogger webpage dict. If content parameter is not
     provided, an empty List will be returned in the dict's content field."""
     if content:
