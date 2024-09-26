@@ -2,13 +2,12 @@
 """Wrapper for Chevron renderer. Opens provided template and renders document.
 """
 
-from datetime import datetime
 import chevron
 
 
-def render(path_string: str, content: dict[str, str | datetime]) -> str:
+def render(path_string, content):
     """Run Chevron renderer with provided template
     """
     with open(path_string, 'r', encoding='utf-8') as file:
-        template: str = file.read()
+        template = file.read()
     return chevron.render(template, content)

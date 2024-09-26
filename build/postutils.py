@@ -3,15 +3,13 @@
 Slimeblogger posts.
 """
 
-from datetime import datetime
 from pathlib import Path
 from operator import itemgetter
 from markdown import markdown
 from blog_attributes import BlogAttributes
 
 
-def blog_post_dict(filename: str, title: str, author: str,
-                   date: datetime, body: str) -> dict[str, str | datetime]:
+def blog_post_dict(filename, title, author, date, body):
     """Return a standard Slimeblogger blog post dict."""
     return {
         "filename": filename,
@@ -23,29 +21,27 @@ def blog_post_dict(filename: str, title: str, author: str,
     }
 
 
-def get_post_dicts(post_path: str) -> list[dict[str, str | datetime]]:
+def get_post_dicts(post_path):
     """Fetch Markdown files from directory, store in a dict,
     then append to a list. Returns list of dicts.
     """
-    directory: Path = Path(post_path)
-    post_list: list[dict[str, str | datetime]] = []
-    file: Path
+    directory = Path(post_path)
+    post_list = []
     for file in directory.iterdir():
         if file.suffix == ".md":
             with open(file.resolve(), 'r', encoding='utf-8') as doc:
-                first_line: str = doc.readline()
-                post_body: str = markdown(doc.read())
-            attributes: BlogAttributes = BlogAttributes(first_line)
-            filename: str = file.stem + ".html"
-            post: dict[str, str | datetime] = \
-                blog_post_dict(filename, attributes.title,
-                               attributes.author, attributes.date,
-                               post_body)
+                first_line = doc.readline()
+                post_body = markdown(doc.read())
+            attributes = BlogAttributes(first_line)
+            filename = file.stem + ".html"
+            post = blog_post_dict(filename, attributes.title,
+                                  attributes.author, attributes.date,
+                                  post_body)
             post_list.append(post)
     post_list.sort(key=itemgetter("true_date"), reverse=True)
     return post_list
 
 
-def package_post(post: str) -> dict[str, str]:
+def package_post(post):
     """Take blog post and return in dict format required for site template."""
     return {"post": post}
