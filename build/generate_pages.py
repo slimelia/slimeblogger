@@ -29,7 +29,7 @@ def create_post_pages(posts, config, post_template, site_template, pages_dir):
         page_content = page_dict("../", config.get("rootURL", ""),
                                  config.get("title", ""), prepared_post)
         webpage = render(site_template, page_content)
-        with open(f"{pages_dir}/{post.get('filename', '')}", "w",
+        with open(f"{pages_dir}/{post.get('filename', '')}", "w+",
                   encoding="utf-8") as html_page:
             html_page.write(webpage)
     return rendered_posts
